@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  pull-requests: read
+  pull-requests: read # Дозволяє SonarCloud писати результати в коментарі до PR
 
 jobs:
   sonar-check:
@@ -15,21 +15,29 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0 # Важливо для SonarCloud, щоб бачити історію коммітів
 
-      - uses: actions/setup-dotnet@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      - name: SonarScanner Begin
+      - name: Install SonarScanner
         run: |
           dotnet tool install --global dotnet-sonarscanner
+        shell: pwsh
+
+      - name: SonarScanner Begin
+        run: |
           dotnet sonarscanner begin `
-          /d:sonar.projectKey="Niket-crypto_SdrProject" `
-          /d:sonar.organization="niket-crypto" `
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
-          /d:sonar.host.url="https://sonarcloud.io" `
-          /d:sonar.qualitygate.wait=true
+            /k:"Niket-crypto_SdrProject" `
+            /o:"niket-crypto" `
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
+            /d:sonar.host.url="https://sonarcloud.io" `
+            /d:sonar.qualitygate.wait=true `
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.xml" `
+            /d:sonar.exclusions=**/bin/**,**/obj/**,**/.github/**
         shell: pwsh
 
       - name: Restore
@@ -38,6 +46,12 @@ jobs:
       - name: Build
         run: dotnet build SdrSolution.sln -c Release --no-restore
 
+      # Команда для тестів (залиш поки закоментованою, якщо тестів ще немає, 
+      # або розкоментуй, якщо хочеш спробувати підняти Coverage)
+      # - name: Test
+      #   run: dotnet test SdrSolution.sln --collect:"XPlat Code Coverage"
+
       - name: SonarScanner End
-        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        run: |
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
         shell: pwsh
