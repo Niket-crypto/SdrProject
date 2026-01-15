@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace ServerApp
 {
-    class Program
+    // Додаємо static, щоб задовольнити правило RSPEC-1118
+    static class Program
     {
-        // Сонар вимагав статичний Random, щоб не створювати нові об'єкти в циклі
         private static readonly Random _random = new Random();
 
         static async Task Main(string[] args)
         {
             Console.Title = "SDR Hardware Emulator";
-            int tcpPort = 50000;
-            int udpPort = 60000;
+            const int tcpPort = 50000;
+            const int udpPort = 60000;
 
             using var cts = new CancellationTokenSource();
             
@@ -39,7 +39,7 @@ namespace ServerApp
                         for (int i = 0; i < 100; i++)
                         {
                             byte[] dummyIqData = new byte[1024];
-                            _random.NextBytes(dummyIqData); // Тепер Reliability буде "A"
+                            _random.NextBytes(dummyIqData); 
                             
                             await udpClient.SendAsync(dummyIqData, dummyIqData.Length, endpoint);
 
@@ -53,6 +53,10 @@ namespace ServerApp
                     }
                     Console.WriteLine("[Server] Session ended.\n");
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                // Коректне завершення при скасуванні
             }
             finally
             {
