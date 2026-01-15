@@ -10,7 +10,7 @@ namespace SdrClientApp.Networking
         private UdpClient? _udpClient;
         private readonly int _port;
         private bool _isListening;
-        private Task? _listenTask;
+        // ВИДАЛЕНО: private Task? _listenTask; (Сонар сварився на unused field)
 
         public event EventHandler<byte[]>? MessageReceived;
 
@@ -21,19 +21,22 @@ namespace SdrClientApp.Networking
 
         public async Task StartListeningAsync()
         {
-            if (_isStreaming) return;
+            if (_isListening) return; // Спростили перевірку
 
             _udpClient = new UdpClient(_port);
             _isListening = true;
 
             Console.WriteLine($"[UDP] Listening for IQ data on port {_port}...");
 
-            _listenTask = Task.Run(async () =>
+            // Запускаємо фонову задачу без збереження її в поле, 
+            // оскільки ми не чекаємо її завершення через await в іншому місці
+            _ = Task.Run(async () =>
             {
                 while (_isListening)
                 {
                     try
                     {
+                        if (_udpClient == null) break;
                         var result = await _udpClient.ReceiveAsync();
                         MessageReceived?.Invoke(this, result.Buffer);
                     }
@@ -47,8 +50,6 @@ namespace SdrClientApp.Networking
 
             await Task.CompletedTask;
         }
-
-        private bool _isStreaming => _isListening;
 
         public void StopListening()
         {
