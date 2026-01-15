@@ -24,7 +24,7 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # 1) BEGIN: SonarScanner for .NET
+      # 1) ПОЧАТОК: Вказуємо Сонару, де шукати звіт про покриття
       - name: SonarScanner Begin
         run: |
           dotnet tool install --global dotnet-sonarscanner
@@ -35,20 +35,19 @@ jobs:
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
             /d:sonar.host.url="https://sonarcloud.io" `
             /d:sonar.cs.opencover.reportsPaths="**/coverage.xml" `
-            /d:sonar.cpd.cs.minimumTokens=40 `
-            /d:sonar.cpd.cs.minimumLines=5 `
             /d:sonar.exclusions="**/bin/**,**/obj/**,**/sonarcloud.yml" `
             /d:sonar.qualitygate.wait=true
         shell: pwsh
 
-      # 2) BUILD & TEST
+      # 2) ЗБІРКА
       - name: Restore
         run: dotnet restore SdrSolution.sln
 
       - name: Build
         run: dotnet build SdrSolution.sln -c Release --no-restore
 
-      - name: Tests with coverage (OpenCover)
+      # 3) ТЕСТИ: Генеруємо звіт у форматі opencover
+      - name: Tests with coverage
         run: |
           dotnet test SdrSolution.sln -c Release --no-build `
             /p:CollectCoverage=true `
@@ -56,7 +55,7 @@ jobs:
             /p:CoverletOutput="../../TestResults/coverage.xml"
         shell: pwsh
 
-      # 3) END: SonarScanner
+      
       - name: SonarScanner End
         run: |
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
