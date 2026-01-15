@@ -5,7 +5,7 @@ using SdrClientApp.Networking;
 
 namespace SdrClientApp
 {
-    class Program
+   static class Program
     {
         static async Task Main(string[] args)
         {
@@ -14,7 +14,7 @@ namespace SdrClientApp
             Console.WriteLine("   NETSDR CLIENT v1.0 (Lab Edition)    ");
             Console.WriteLine("========================================\n");
 
-            // Ініціалізація обгортки для TCP (50000) та UDP (60000)
+            // ВІГ­ВіГ¶ВіГ Г«ВіГ§Г Г¶ВіГї Г®ГЎГЈГ®Г°ГІГЄГЁ Г¤Г«Гї TCP (50000) ГІГ  UDP (60000)
             var tcp = new TcpWrapper("127.0.0.1", 50000);
             var udp = new UdpWrapper(60000);
 
@@ -49,7 +49,7 @@ namespace SdrClientApp
                             break;
                     }
                 }
-                await Task.Delay(100); // Щоб не вантажити процесор
+                await Task.Delay(100); // Г™Г®ГЎ Г­ГҐ ГўГ Г­ГІГ Г¦ГЁГІГЁ ГЇГ°Г®Г¶ГҐГ±Г®Г°
             }
         }
     }
