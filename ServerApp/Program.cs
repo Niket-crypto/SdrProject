@@ -1,15 +1,16 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerApp
 {
-    // Додаємо static, щоб задовольнити правило RSPEC-1118
     static class Program
     {
-        private static readonly Random _random = new Random();
+        // Використовуємо RandomNumberGenerator замість Random для безпеки (Security Hotspot)
+        private static readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
 
         static async Task Main(string[] args)
         {
@@ -25,9 +26,12 @@ namespace ServerApp
 
             try 
             {
+                // Використовуємо токен для коректного виходу з циклу
                 while (!cts.IsCancellationRequested)
                 {
                     Console.WriteLine("[Server] Waiting for client connection...");
+                    
+                    // Приймаємо клієнта
                     using var client = await listener.AcceptTcpClientAsync();
                     Console.WriteLine("[Server] Client connected! Emulating IQ data stream...");
 
@@ -39,11 +43,15 @@ namespace ServerApp
                         for (int i = 0; i < 100; i++)
                         {
                             byte[] dummyIqData = new byte[1024];
-                            _random.NextBytes(dummyIqData); 
+                            
+                            // Заповнюємо дані безпечним рандомом (виправляє Security Hotspot)
+                            _rng.GetBytes(dummyIqData); 
                             
                             await udpClient.SendAsync(dummyIqData, dummyIqData.Length, endpoint);
 
-                            if (i % 10 == 0) Console.WriteLine($"[Server] Sent {i} packets of IQ data");
+                            if (i % 10 == 0) 
+                                Console.WriteLine($"[Server] Sent {i} packets of IQ data");
+
                             await Task.Delay(100, cts.Token);
                         }
                     }
@@ -56,11 +64,12 @@ namespace ServerApp
             }
             catch (OperationCanceledException)
             {
-                // Коректне завершення при скасуванні
+                Console.WriteLine("[Server] Operation cancelled.");
             }
             finally
             {
                 listener.Stop();
+                _rng.Dispose(); // Звільняємо ресурси генератора
             }
         }
     }
