@@ -38,16 +38,22 @@ namespace SdrClientApp.Networking
             _stream?.Close();
             _client?.Close();
             _client = null;
+            _stream = null; // Обнуляємо стрім для безпеки
             Console.WriteLine("[TCP] Connection closed.");
         }
 
         public async Task SendMessageAsync(byte[] data)
         {
+            // Сонар просить перевіряти data на null (правило CA1062)
+            if (data == null) return;
+
             if (Connected && _stream != null)
             {
                 try
                 {
-                    await _stream.WriteAsync(data, 0, data.Length);
+                    // ВИПРАВЛЕННЯ: використовуємо Memory замість (byte[], int, int)
+                    // Це прибирає попередження RSPEC-4487 / CS8604
+                    await _stream.WriteAsync(data.AsMemory(0, data.Length));
                     await _stream.FlushAsync();
                 }
                 catch (Exception ex)
