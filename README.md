@@ -85,6 +85,13 @@ jobs:
 Здати: посилання на PR чи commit, скрін Quality Gate, скрін бейджів у README.
 
 
+Лаба 2 — Code Smells через PR + “gated merge”
+Мета: виправити 5–10 зауважень Sonar (bugs/smells) без зміни поведінки.
+
+Кроки:
+
+Дрібними комітами виправити знайдені Sonar-проблеми у NetSdrClientApp.
+Здати: скріни змін метрик у Sonar.
 
 
 
