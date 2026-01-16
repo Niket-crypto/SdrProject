@@ -1,3 +1,9 @@
+# SDR Project
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Niket-crypto_SdrProject&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Niket-crypto_SdrProject)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Niket-crypto_SdrProject&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Niket-crypto_SdrProject)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Niket-crypto_SdrProject&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Niket-crypto_SdrProject)
+
 Структура 8 лабораторних
 Кожна робота — через Pull Request або окремий commit. Додати короткий опис: що змінено / як перевірити + звіт про хід виконання в Classroom.
 
@@ -77,6 +83,7 @@ jobs:
 Вимкнути Automatic Analysis в проєкті.
 Перевірити PR-декорацію (вкладка Checks у PR).
 Здати: посилання на PR чи commit, скрін Quality Gate, скрін бейджів у README.
+
 
 
 
