@@ -5,32 +5,37 @@ namespace SdrClientApp.Messages
 {
     public static class MessageHelper
     {
-        // Константи протоколу NetSDR (як у друга)
+        
         public const ushort SET_CONTROL_ITEM = 0x0000;
         public const ushort ACK = 0x0003;
 
-        // Коди елементів керування
+        
         public const ushort CID_RECEIVER_STATE = 0x0018;
         public const ushort CID_RECEIVER_FREQUENCY = 0x0020;
         public const ushort CID_RECEIVER_SAMPLE_RATE = 0x00B0;
 
-        // --- МЕТОДИ ДЛЯ ТЕСТІВ (Лаба №3) ---
-
-        // Цей метод вимагав твій тест у SdrClientTests
+       
         public static byte[] CreateFrequencyPayload(uint frequencyHz)
         {
-            // У NetSDR частота передається як 5-байтне ціле (Little Endian)
+           
             byte[] fullBytes = BitConverter.GetBytes((long)frequencyHz);
             byte[] payload = new byte[5];
             Array.Copy(fullBytes, 0, payload, 0, 5);
             return payload;
         }
-
-        // Цей метод потрібен для тесту довжини заголовка
+ public static byte[] CreateFrequencyPayloadBackup(uint frequencyHz)
+        {
+           
+            byte[] fullBytes = BitConverter.GetBytes((long)frequencyHz);
+            byte[] payload = new byte[5];
+            Array.Copy(fullBytes, 0, payload, 0, 5);
+            return payload;
+        }
+        
         public static byte[] GetControlItemMessage(ushort controlCode, byte itemCode, byte[] parameters)
         {
             var message = new List<byte>();
-            // Заголовок (Довжина = параметри + тип + код + айтем)
+            
             ushort length = (ushort)(parameters.Length + 5);
             message.AddRange(BitConverter.GetBytes(length));
             message.AddRange(BitConverter.GetBytes(SET_CONTROL_ITEM));
@@ -40,26 +45,25 @@ namespace SdrClientApp.Messages
             return message.ToArray();
         }
 
-        // --- ОСНОВНІ МЕТОДИ КЛІЄНТА ---
-
+        
         public static byte[] CreateCaptureCommand(ushort code, byte[] parameters)
         {
             var message = new List<byte>();
 
-            // Заголовок: Довжина повідомлення (2 байти)
+            // Г‡Г ГЈГ®Г«Г®ГўГ®ГЄ: Г„Г®ГўГ¦ГЁГ­Г  ГЇГ®ГўВіГ¤Г®Г¬Г«ГҐГ­Г­Гї (2 ГЎГ Г©ГІГЁ)
             ushort length = (ushort)(parameters.Length + 4);
             message.AddRange(BitConverter.GetBytes(length));
 
-            // Код команди (2 байти)
+            // ГЉГ®Г¤ ГЄГ®Г¬Г Г­Г¤ГЁ (2 ГЎГ Г©ГІГЁ)
             message.AddRange(BitConverter.GetBytes(code));
 
-            // Дані команди
+            // Г„Г Г­Ві ГЄГ®Г¬Г Г­Г¤ГЁ
             message.AddRange(parameters);
 
             return message.ToArray();
         }
 
-        // Метод для форматування частоти (5-байтне представлення)
+        // ГЊГҐГІГ®Г¤ Г¤Г«Гї ГґГ®Г°Г¬Г ГІГіГўГ Г­Г­Гї Г·Г Г±ГІГ®ГІГЁ (5-ГЎГ Г©ГІГ­ГҐ ГЇГ°ГҐГ¤Г±ГІГ ГўГ«ГҐГ­Г­Гї)
         public static byte[] FormatFrequency(long hz)
         {
             byte[] freqBytes = BitConverter.GetBytes(hz);
