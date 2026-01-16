@@ -1,4 +1,4 @@
-# SDR Project
+# Лабораторный роботи 1-8
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Niket-crypto_SdrProject&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Niket-crypto_SdrProject)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Niket-crypto_SdrProject&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Niket-crypto_SdrProject)
@@ -83,6 +83,7 @@ jobs:
 Вимкнути Automatic Analysis в проєкті.
 Перевірити PR-декорацію (вкладка Checks у PR).
 Здати: посилання на PR чи commit, скрін Quality Gate, скрін бейджів у README.
+
 
 
 
