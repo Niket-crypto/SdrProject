@@ -32,12 +32,7 @@ namespace SdrClientTests
             Assert.NotEmpty(payload);
         }
 
-        public void Test_Frequency_Payload_IsNotEmpty()
-        {
-            uint freq = 100000000;
-            var payload = MessageHelper.CreateFrequencyPayload(freq);
-            Assert.NotEmpty(payload);
-        }
+    
         
         [Fact]
         public void Test_Frequency_Payload_CorrectSize()
