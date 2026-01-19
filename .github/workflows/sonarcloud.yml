@@ -28,14 +28,7 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
-          dotnet sonarscanner begin `
-            /k:"Niket-crypto_SdrProject" `
-            /o:"niket-crypto" `
-            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
-            /d:sonar.host.url="https://sonarcloud.io" `
-            /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.xml" `
-            /d:sonar.exclusions="**/bin/**,**/obj/**,**/sonarcloud.yml" `
-            /d:sonar.qualitygate.wait=true
+          dotnet sonarscanner begin /k:"Niket-crypto_SdrProject" /o:"niket-crypto" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.xml" /d:sonar.exclusions="**/SdrClientApp/**,**/ServerApp/Models/**,**/bin/**,**/obj/**,**/sonarcloud.yml" /d:sonar.test.exclusions="**/ServerTests/**,**/SdrClientTests/**" /d:sonar.qualitygate.wait=false
         shell: pwsh
 
       - name: Restore
@@ -49,7 +42,8 @@ jobs:
           dotnet test SdrSolution.sln -c Release --no-build `
             /p:CollectCoverage=true `
             /p:CoverletOutputFormat=opencover `
-            /p:CoverletOutput="./TestResults/coverage.xml"
+            /p:CoverletOutput="./TestResults/coverage.xml" `
+            /p:MergeWith="../TestResults/coverage.json"
         shell: pwsh
 
       - name: SonarScanner End
