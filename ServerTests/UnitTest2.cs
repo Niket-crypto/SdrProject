@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace ServerTests
 {
-    // Спеціальний клас "заглушка" для тестування (Mocking)
     public class FakeWriter : IMessageWriter
     {
         public List<string> Messages = new List<string>();
@@ -16,27 +15,18 @@ namespace ServerTests
         [Fact]
         public void Process_ShouldReturnCorrectEchoMessage()
         {
-            // Arrange (Підготовка)
+            // Arrange
             var fakeWriter = new FakeWriter();
             var server = new EchoServer(fakeWriter);
             string input = "Hello World";
 
-            // Act (Дія)
+            // Act
             var result = server.Process(input);
 
-            // Assert (Перевірка результату)
+            // Assert
             Assert.Equal("Echo: Hello World", result);
-            
             Assert.Single(fakeWriter.Messages);
             Assert.Equal("Echo: Hello World", fakeWriter.Messages[0]);
-        }
-
-        [Fact]
-        public void Test_Server_Port_Definition()
-        {
-            
-            int expectedPort = 50000;
-            Assert.Equal(50000, expectedPort);
         }
     }
 }
