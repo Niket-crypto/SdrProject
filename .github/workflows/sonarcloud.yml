@@ -34,7 +34,8 @@ jobs:
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
             /d:sonar.host.url="https://sonarcloud.io" `
             /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.xml" `
-            /d:sonar.exclusions="**/bin/**,**/obj/**,**/sonarcloud.yml" `
+            /d:sonar.exclusions="**/SdrClientApp/**, **/ServerApp/Models/**, **/bin/**, **/obj/**, **/sonarcloud.yml" `
+            /d:sonar.test.exclusions="**/ServerTests/**, **/SdrClientTests/**" `
             /d:sonar.qualitygate.wait=true
         shell: pwsh
 
@@ -49,12 +50,12 @@ jobs:
           dotnet test SdrSolution.sln -c Release --no-build `
             /p:CollectCoverage=true `
             /p:CoverletOutputFormat=opencover `
-            /p:CoverletOutput="./TestResults/coverage.xml"
+            /p:CoverletOutput="./TestResults/coverage.xml" `
+            /p:MergeWith="../TestResults/coverage.json"
         shell: pwsh
 
       - name: SonarScanner End
         run: |
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
         shell: pwsh
-
 

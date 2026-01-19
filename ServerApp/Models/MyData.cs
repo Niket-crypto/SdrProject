@@ -1,6 +1,8 @@
-using ServerApp.Services; 
-namespace ServerApp.Models {
-    public class MyData {
-        public MyService _service; // Використовуємо сервіс у моделі
+namespace ServerApp.Models
+{
+    public class MyData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "Clean Lab 6 Data";
     }
 }
