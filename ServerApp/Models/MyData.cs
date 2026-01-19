@@ -1,6 +1,15 @@
-using ServerApp.Services; 
-namespace ServerApp.Models {
-    public class MyData {
-        public MyService _service; // Використовуємо сервіс у моделі
+using ServerApp.Services;
+
+namespace ServerApp.Models
+{
+    public class MyData
+    {
+        public string Name { get; set; } = string.Empty;
+        
+        public string GetFormattedInfo(IMyService service)
+        {
+            if (service == null) return Name;
+            return $"{Name} - {service.GetServiceStatus()}";
+        }
     }
 }
