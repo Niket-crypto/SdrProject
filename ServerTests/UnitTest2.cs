@@ -1,12 +1,12 @@
 using Xunit;
 using ServerApp;
-using ServerApp.Models; // Виправлено: додано для доступу до класу MyData
+using ServerApp.Models; 
 using System;
 using System.Collections.Generic;
 
 namespace ServerTests
 {
-    // Допоміжний клас для тестів
+   
     public class FakeWriter : IMessageWriter
     {
         public List<string> Messages = new List<string>();
