@@ -1,16 +1,41 @@
 using Xunit;
-// Здесь будет ссылка  ServerApp
+using ServerApp;
+using System.Collections.Generic;
 
 namespace ServerTests
 {
-    public class HardwareEmulatorTests
+    // РЎРїРµС†С–Р°Р»СЊРЅРёР№ РєР»Р°СЃ "Р·Р°РіР»СѓС€РєР°" РґР»СЏ С‚РµСЃС‚СѓРІР°РЅРЅСЏ (Mocking)
+    public class FakeWriter : IMessageWriter
     {
+        public List<string> Messages = new List<string>();
+        public void Write(string message) => Messages.Add(message);
+    }
+
+    public class EchoServerTests
+    {
+        [Fact]
+        public void Process_ShouldReturnCorrectEchoMessage()
+        {
+            // Arrange (РџС–РґРіРѕС‚РѕРІРєР°)
+            var fakeWriter = new FakeWriter();
+            var server = new EchoServer(fakeWriter);
+            string input = "Hello World";
+
+            // Act (Р”С–СЏ)
+            var result = server.Process(input);
+
+            // Assert (РџРµСЂРµРІС–СЂРєР° СЂРµР·СѓР»СЊС‚Р°С‚Сѓ)
+            Assert.Equal("Echo: Hello World", result);
+            
+            Assert.Single(fakeWriter.Messages);
+            Assert.Equal("Echo: Hello World", fakeWriter.Messages[0]);
+        }
+
         [Fact]
         public void Test_Server_Port_Definition()
         {
-            // Простейший тест, что сервер настроен на порт 50000
+            
             int expectedPort = 50000;
-            // Тут можно добавить проверку константы из твоего ServerApp
             Assert.Equal(50000, expectedPort);
         }
     }
