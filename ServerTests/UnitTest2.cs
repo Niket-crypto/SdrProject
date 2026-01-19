@@ -1,5 +1,6 @@
 using Xunit;
 using ServerApp;
+using ServerApp.Models; // Додав цей namespace для MyData
 using System;
 using System.Collections.Generic;
 
@@ -27,20 +28,37 @@ namespace ServerTests
         [Fact]
         public void Constructor_ShouldThrowException_WhenWriterIsNull()
         {
-            
             Assert.Throws<ArgumentNullException>(() => new EchoServer(null!));
         }
+
         [Fact]
-public void ConsoleWriter_Write_ShouldNotThrowException()
-{
-    // Arrange
-    var writer = new ConsoleWriter();
-    var message = "Test message";
+        public void ConsoleWriter_Write_ShouldNotThrowException()
+        {
+            // Arrange
+            var writer = new ConsoleWriter();
+            var message = "Test message";
 
-    // Act & Assert
+            // Act & Assert
+            var exception = Record.Exception(() => writer.Write(message));
+            Assert.Null(exception);
+        }
+    }
 
-    var exception = Record.Exception(() => writer.Write(message));
-    Assert.Null(exception);
-}
+  
+    public class MyDataTests
+    {
+        [Fact]
+        public void MyData_Property_ShouldSetAndGet()
+        {
+            // Arrange
+            var data = new MyData();
+            var testValue = "Lab 8 Clean Code";
+
+            // Act
+            data.Name = testValue;
+
+            // Assert
+            Assert.Equal(testValue, data.Name);
+        }
     }
 }
