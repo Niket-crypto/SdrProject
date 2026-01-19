@@ -1,7 +1,6 @@
 using Xunit;
 using ServerApp;
-using ServerApp.Models; // Додав цей namespace для MyData
-using System;
+using ServerApp.Models; 
 using System.Collections.Generic;
 
 namespace ServerTests
