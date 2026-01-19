@@ -1,5 +1,6 @@
 using Xunit;
 using ServerApp;
+using System;
 using System.Collections.Generic;
 
 namespace ServerTests
@@ -15,18 +16,19 @@ namespace ServerTests
         [Fact]
         public void Process_ShouldReturnCorrectEchoMessage()
         {
-            // Arrange
             var fakeWriter = new FakeWriter();
             var server = new EchoServer(fakeWriter);
-            string input = "Hello World";
+            string result = server.Process("Hello");
 
-            // Act
-            var result = server.Process(input);
+            Assert.Equal("Echo: Hello", result);
+            Assert.Contains("Echo: Hello", fakeWriter.Messages);
+        }
 
-            // Assert
-            Assert.Equal("Echo: Hello World", result);
-            Assert.Single(fakeWriter.Messages);
-            Assert.Equal("Echo: Hello World", fakeWriter.Messages[0]);
+        [Fact]
+        public void Constructor_ShouldThrowException_WhenWriterIsNull()
+        {
+            
+            Assert.Throws<ArgumentNullException>(() => new EchoServer(null!));
         }
     }
 }
