@@ -30,5 +30,17 @@ namespace ServerTests
             
             Assert.Throws<ArgumentNullException>(() => new EchoServer(null!));
         }
+        [Fact]
+public void ConsoleWriter_Write_ShouldNotThrowException()
+{
+    // Arrange
+    var writer = new ConsoleWriter();
+    var message = "Test message";
+
+    // Act & Assert
+
+    var exception = Record.Exception(() => writer.Write(message));
+    Assert.Null(exception);
+}
     }
 }
