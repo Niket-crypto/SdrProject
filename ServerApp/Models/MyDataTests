@@ -1,0 +1,24 @@
+using Xunit;
+using ServerApp.Models;
+using ServerApp.Services;
+
+namespace ServerTests
+{
+    public class MyDataTests
+    {
+        [Fact]
+        public void GetFormattedInfo_ShouldReturnCombinedString()
+        {
+            // Arrange
+            var data = new MyData { Name = "SdrProject" };
+            var service = new MyService();
+
+            // Act
+            var result = data.GetFormattedInfo(service);
+
+            // Assert
+            Assert.Contains("SdrProject", result);
+            Assert.Contains("Service is running optimally", result);
+        }
+    }
+}
